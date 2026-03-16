@@ -32,8 +32,11 @@
 
 ### Exercițiul 1 — HashMap și TreeMap
 
+<<<<<<< HEAD
 > 📖 **Exemplu:** Rulează mai întâi [collections/ExampleMap.java](src/com/pao/laboratory03/collections/ExampleMap.java) pentru a vedea cum funcționează Map-urile.
 
+=======
+>>>>>>> 41e0cae (lab4 and submission steps)
 Lucrează în [collections/Main.java](src/com/pao/laboratory03/collections/Main.java) — cerințele sunt în Javadoc.
 
 **Concepte cheie:**
@@ -73,8 +76,11 @@ Studenți la BD (actualizat): [Ana, Elena, George]
 
 ### Exercițiul 2 — Enum-uri cu câmpuri și metode
 
+<<<<<<< HEAD
 > 📖 **Exemplu:** Rulează mai întâi [enums/ExampleEnum.java](src/com/pao/laboratory03/enums/ExampleEnum.java) pentru a vedea enum-uri simple și cu metode abstracte.
 
+=======
+>>>>>>> 41e0cae (lab4 and submission steps)
 Creează `Priority.java` în [enums/](src/com/pao/laboratory03/enums) apoi completează [enums/Main.java](src/com/pao/laboratory03/enums/Main.java).
 
 **Reține:**
@@ -116,8 +122,11 @@ CRITICAL: name=CRITICAL, ordinal=3
 
 ### Exercițiul 3 — Excepții custom
 
+<<<<<<< HEAD
 > 📖 **Exemplu:** Rulează mai întâi [exceptions/ExampleExceptions.java](src/com/pao/laboratory03/exceptions/ExampleExceptions.java) pentru a vedea try-catch, custom exceptions, multi-catch.
 
+=======
+>>>>>>> 41e0cae (lab4 and submission steps)
 Creează `InvalidAgeException.java` și `DuplicateEntryException.java` în [exceptions/](src/com/pao/laboratory03/exceptions), apoi completează [exceptions/Main.java](src/com/pao/laboratory03/exceptions/Main.java).
 
 <details>

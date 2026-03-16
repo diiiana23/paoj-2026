@@ -23,6 +23,7 @@ Programare Avansată pe Obiecte în Java — materiale și resurse pentru cursul
 
 [//]: # (> 🎬 **Video tutorial:** [Cum faci fork și trimiți soluțiile — YouTube]&#40;https://www.youtube.com/watch?v=PLACEHOLDER&#41;)
 
+<<<<<<< HEAD
 ### Pentru laboratoarele online din saptamanile 4-14
 
 #### Prezenta 
@@ -37,6 +38,8 @@ Reminder:
 Prezenta + activitate -> 25%, din care 12.5% pentru prezenta, 7.5% daca rezolvati cel putin exercitiile obligatorii, si 5% daca rezolvati si exercitiile bonus.
 Proiect -> 25%
 
+=======
+>>>>>>> 41e0cae (lab4 and submission steps)
 ### Pre-rechizite
 
 - ✅ Cont pe [github.com](https://github.com) (gratuit)
