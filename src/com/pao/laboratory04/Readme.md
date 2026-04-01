@@ -1,373 +1,368 @@
-# Laboratory 04 — Records, Comparable aprofundat, Comparator multiplu
+﻿# Laboratory 03 — Colecții (`Map`), Enum-uri, Excepții
 
-> **Pachet:** `com.pao.laboratory05` · **Curs:** 01–04 · 
-> **Data limită:** miercuri 25 martie 2026, ora 23:59
+> **Pachet:** `com.pao.laboratory04` · **Curs:** 07–08 · **Pre-rechizite:** [Laboratory 02](src/com/pao/laboratory02/Readme.md)
 
 ---
 
 <details open>
 <summary><h2>Obiective</h2></summary>
 
-1. **`record`** — sintaxă, ce generează compilatorul automat, când îl folosești
-2. **`record` + interfețe** — un `record` poate implementa `Comparable`
-3. **`Comparable<T>`** — sortare naturală (una singură per clasă, `compareTo`)
-4. **`Comparator<T>`** — sortări alternative (oricâte, clase externe)
-5. **`Arrays.sort`** — cu sortare naturală și cu `Comparator`
-6. **Singleton + array resize** — recapitulare pattern-ul din Lab 01
+1. **`Map`** — `HashMap`, `TreeMap`: perechi cheie-valoare
+2. **Enum-uri** — constante cu câmpuri, constructori, metode abstracte per constantă
+3. **Excepții** — ierarhia `Throwable`, checked vs unchecked, `try-catch-finally`, excepții custom
+4. **Exercițiu integrator** — `Map` + `enum` + excepții custom + Singleton
 
-> 🎯 **De data aceasta scrii TOATE fișierele `.java` de la zero.**
-> `Main.java` din fiecare pachet este doar punctul de pornire — înlocuiește
-> `System.out.println(...)` cu codul real după ce ai creat clasele necesare.
+> ⚠️ De data aceasta **NU primiți clase model gata făcute**. Creați totul de la zero — simulează munca pe proiectul individual.
 
 </details>
-
----
-
-## Fișiere din acest laborator
-
-| Fișier | Rol |
-|--------|-----|
-| [playlist/Readme.md](playlist/Readme.md) | Java Records quick reference — citește înainte de Exercise 1 |
-| [playlist/Main.java](playlist/Main.java) | Exercise 1 — punct de intrare, creezi restul |
-| [biblioteca/Main.java](biblioteca/Main.java) | Exercise 2 — punct de intrare, creezi restul |
-| [angajati/Main.java](angajati/Main.java) | Exercise 3 — punct de intrare, creezi restul |
-| [audit/Main.java](audit/Main.java) | Exercise 4 Bonus — punct de intrare, creezi restul |
 
 ---
 
 ## Exerciții
 
-| # | Pachet | Domeniu | Concept principal | Timp estimat |
-|---|--------|---------|-------------------|--------------|
-| 1 | `playlist/` | Playlist muzică | `record` + `Comparable` + `Comparator` | ~30 min |
-| 2 | `biblioteca/` | Bibliotecă | clasă obișnuită + `Comparable` + 2 `Comparator`-uri + Singleton | ~35 min |
-| 3 | `angajati/` | Angajați | `record` pentru date simple + `Comparable` + Singleton + meniu | ~40 min |
-| 4 *(bonus)* | `audit/` | Audit log | `record` imutabil ca înregistrare de audit | ~30 min |
+| # | Exercițiu | Timp | Ce creezi |
+|---|-----------|------|-----------|
+| 1 | HashMap + TreeMap | ~20 min | Totul în [collections/Main.java](src/com/pao/laboratory03/collections/Main.java) |
+| 2 | Enum-uri | ~20 min | `Priority.java` + [enums/Main.java](src/com/pao/laboratory03/enums/Main.java) |
+| 3 | Excepții custom | ~25 min | `InvalidAgeException.java`, `DuplicateEntryException.java` + [exceptions/Main.java](src/com/pao/laboratory03/exceptions/Main.java) |
+| 4 | Integrator: Studenți + Note | ~35 min | 6 clase de la zero + [exercise/Main.java](src/com/pao/laboratory03/exercise/Main.java) |
+| 5 | **Bonus:** Task Manager + Audit | ~45 min | ~8 clase de la zero + [bonus/Main.java](src/com/pao/laboratory03/bonus/Main.java) |
 
 ---
 
-## Exercise 1 — Playlist
+### Exercițiul 1 — HashMap și TreeMap
 
-📄 **Pachet:** [playlist/](playlist/) · 📖 **Pre-citire:** [playlist/Readme.md](playlist/Readme.md) — Java Records quick reference (Levels 1–4)
+<<<<<<< HEAD
+> 📖 **Exemplu:** Rulează mai întâi [collections/ExampleMap.java](src/com/pao/laboratory03/collections/ExampleMap.java) pentru a vedea cum funcționează Map-urile.
 
-### Ce creezi (toate fișierele în `com.pao.laboratory05.playlist`)
+=======
+>>>>>>> 41e0cae (lab4 and submission steps)
+Lucrează în [collections/Main.java](src/com/pao/laboratory03/collections/Main.java) — cerințele sunt în Javadoc.
 
-#### `Song.java` — record
-```java
-public record Song(String title, String artist, int durationSeconds)
-        implements Comparable<Song> {
-    // compareTo: sortare după titlu (alfabetic)
-    // Hint: String are deja compareTo — folosește-l
-}
-```
-
-Un `record` generează **automat**:
-- constructor cu toți parametrii
-- getteri cu același nume ca parametrii (`title()`, `artist()`, `durationSeconds()`)
-- `toString()`, `equals()`, `hashCode()`
-
-Tu adaugi doar `implements Comparable<Song>` și `compareTo`.
-
-#### `SongDurationComparator.java` — Comparator extern
-```java
-public class SongDurationComparator implements Comparator<Song> {
-    // compare: sortare după durationSeconds crescător
-}
-```
-
-#### `Playlist.java` — clasă cu array de Song-uri
-Câmpuri:
-- `private String name`
-- `private Song[] songs` (inițializat ca `new Song[0]`)
-
-Metode:
-- `Playlist(String name)` — constructor
-- `void addSong(Song song)` — adaugă cu pattern-ul de resize (`System.arraycopy`)
-- `void printSortedByTitle()` — clonează array-ul, `Arrays.sort(copy)`, afișează
-- `void printSortedByDuration()` — clonează, `Arrays.sort(copy, new SongDurationComparator())`, afișează
-- `int getTotalDuration()` — suma `durationSeconds` din toate song-urile
-
-> ⚠️ Clonează întotdeauna înainte de sort (`Song[] copy = songs.clone()`)
-> ca să nu modifici ordinea originală din playlist.
-
-#### `Main.java` — completează cu:
-```java
-Playlist playlist = new Playlist("Road Trip");
-playlist.addSong(new Song("Waterloo", "ABBA", 174));
-playlist.addSong(new Song("Bohemian Rhapsody", "Queen", 354));
-playlist.addSong(new Song("Imagine", "John Lennon", 187));
-playlist.addSong(new Song("Smells Like Teen Spirit", "Nirvana", 301));
-
-System.out.println("=== " + playlist.getName() + " ===");
-System.out.println("Durata totală: " + playlist.getTotalDuration() + "s\n");
-
-System.out.println("--- Sortate după titlu ---");
-playlist.printSortedByTitle();
-
-System.out.println("\n--- Sortate după durată ---");
-playlist.printSortedByDuration();
-```
+**Concepte cheie:**
+- `HashMap<K, V>` — acces O(1), ordine nepredictibilă
+- `TreeMap<K, V>` — chei **sortate**, acces O(log n)
+- `put`, `get`, `getOrDefault`, `keySet`, `values`, `entrySet`
+- `Map<String, List<String>>` — map cu liste ca valori
 
 <details>
 <summary><b>Output așteptat</b></summary>
 
 ```
-=== Road Trip ===
-Durata totală: 1016s
+=== PARTEA A: HashMap — frecvența cuvintelor ===
+Frecvență: {python=2, c++=2, java=3, rust=1, go=1}
+Conține 'rust'? true
+Chei: [python, c++, java, rust, go]
+Valori: [2, 2, 3, 1, 1]
+python -> 2
+c++ -> 2
+java -> 3
+rust -> 1
+go -> 1
 
---- Sortate după titlu ---
-Song[title=Bohemian Rhapsody, artist=Queen, durationSeconds=354]
-Song[title=Imagine, artist=John Lennon, durationSeconds=187]
-Song[title=Smells Like Teen Spirit, artist=Nirvana, durationSeconds=301]
-Song[title=Waterloo, artist=ABBA, durationSeconds=174]
+=== PARTEA B: TreeMap — sortare automată ===
+Sortat: {c++=2, go=1, java=3, python=2, rust=1}
+Prima cheie: c++
+Ultima cheie: rust
 
---- Sortate după durată ---
-Song[title=Waterloo, artist=ABBA, durationSeconds=174]
-Song[title=Imagine, artist=John Lennon, durationSeconds=187]
-Song[title=Smells Like Teen Spirit, artist=Nirvana, durationSeconds=301]
-Song[title=Bohemian Rhapsody, artist=Queen, durationSeconds=354]
-```
-
-> 📌 `toString()` pentru record arată exact `Song[title=..., artist=..., durationSeconds=...]`
-> — e generat automat, nu trebuie să-l scrii tu.
-
-</details>
-
----
-
-## Exercise 2 — Bibliotecă
-
-📄 **Pachet:** [biblioteca/](biblioteca/)
-
-### Ce creezi (toate fișierele în `com.pao.laboratory05.biblioteca`)
-
-#### `Carte.java` — clasă obișnuită cu `Comparable`
-Câmpuri private: `String titlu`, `String autor`, `int an`, `double rating`
-
-- Constructor complet
-- Getteri pentru toate câmpurile
-- `toString()` → `"Carte{titlu='...', autor='...', an=..., rating=...}"`
-- `implements Comparable<Carte>` — **sortare după `rating` descrescător**
-  (cel mai bine cotat apare primul)
-
-#### `CarteAnComparator.java` — Comparator extern
-Sortare după `an` crescător (cea mai veche apare prima).
-
-#### `CarteAutorComparator.java` — Comparator extern
-Sortare după `autor` alfabetic.
-
-#### `BibliotecaService.java` — Singleton
-- Constructor privat, `getInstance()` cu Holder intern (pattern din Lab 01)
-- Câmp: `private Carte[] carti` (inițializat `new Carte[0]`)
-- `void addCarte(Carte carte)` — resize + adaugă + printează confirmare
-- `void listSortedByRating()` — clonează, `Arrays.sort(copy)` (natural = `Comparable`), afișează
-- `void listSortedBy(Comparator<Carte> comparator)` — clonează, `Arrays.sort(copy, comparator)`, afișează
-
-#### `Main.java` — completează cu:
-```java
-BibliotecaService biblioteca = BibliotecaService.getInstance();
-biblioteca.addCarte(new Carte("Ion", "Liviu Rebreanu", 1920, 4.5));
-biblioteca.addCarte(new Carte("Moromeții", "Marin Preda", 1955, 4.8));
-biblioteca.addCarte(new Carte("Enigma Otiliei", "George Călinescu", 1938, 4.3));
-biblioteca.addCarte(new Carte("Baltagul", "Mihail Sadoveanu", 1930, 4.6));
-
-System.out.println("\n--- După rating (descrescător) ---");
-biblioteca.listSortedByRating();
-
-System.out.println("\n--- După an (crescător) ---");
-biblioteca.listSortedBy(new CarteAnComparator());
-
-System.out.println("\n--- După autor (alfabetic) ---");
-biblioteca.listSortedBy(new CarteAutorComparator());
-```
-
-<details>
-<summary><b>Output așteptat</b></summary>
-
-```
-Carte adăugată: Ion
-Carte adăugată: Moromeții
-Carte adăugată: Enigma Otiliei
-Carte adăugată: Baltagul
-
---- După rating (descrescător) ---
-1. Carte{titlu='Moromeții', autor='Marin Preda', an=1955, rating=4.8}
-2. Carte{titlu='Baltagul', autor='Mihail Sadoveanu', an=1930, rating=4.6}
-3. Carte{titlu='Ion', autor='Liviu Rebreanu', an=1920, rating=4.5}
-4. Carte{titlu='Enigma Otiliei', autor='George Călinescu', an=1938, rating=4.3}
-
---- După an (crescător) ---
-1. Carte{titlu='Ion', autor='Liviu Rebreanu', an=1920, rating=4.5}
-2. Carte{titlu='Baltagul', autor='Mihail Sadoveanu', an=1930, rating=4.6}
-3. Carte{titlu='Enigma Otiliei', autor='George Călinescu', an=1938, rating=4.3}
-4. Carte{titlu='Moromeții', autor='Marin Preda', an=1955, rating=4.8}
-
---- După autor (alfabetic) ---
-1. Carte{titlu='Enigma Otiliei', autor='George Călinescu', an=1938, rating=4.3}
-2. Carte{titlu='Ion', autor='Liviu Rebreanu', an=1920, rating=4.5}
-3. Carte{titlu='Moromeții', autor='Marin Preda', an=1955, rating=4.8}
-4. Carte{titlu='Baltagul', autor='Mihail Sadoveanu', an=1930, rating=4.6}
+=== PARTEA C: Map cu obiecte ===
+Studenți la PAOJ: [Ana, Mihai, Ion]
+Studenți la BD (actualizat): [Ana, Elena, George]
 ```
 
 </details>
 
 ---
 
-## Exercise 3 — Angajați
+### Exercițiul 2 — Enum-uri cu câmpuri și metode
 
-📄 **Pachet:** [angajati/](angajati/)
+<<<<<<< HEAD
+> 📖 **Exemplu:** Rulează mai întâi [enums/ExampleEnum.java](src/com/pao/laboratory03/enums/ExampleEnum.java) pentru a vedea enum-uri simple și cu metode abstracte.
 
-### Ce creezi (toate fișierele în `com.pao.laboratory05.angajati`)
+=======
+>>>>>>> 41e0cae (lab4 and submission steps)
+Creează `Priority.java` în [enums/](src/com/pao/laboratory03/enums) apoi completează [enums/Main.java](src/com/pao/laboratory03/enums/Main.java).
 
-#### `Departament.java` — record
-```java
-public record Departament(String nume, String locatie) { }
+**Reține:**
+- Enum = set fix de constante singleton
+- Pot avea câmpuri, constructor **privat**, getteri, metode abstracte
+- `values()`, `valueOf("STRING")`, `name()`, `ordinal()`
+- Comparare cu `==` (nu `.equals()`)
+
+<details>
+<summary><b>Output așteptat</b></summary>
+
 ```
-Record-ul generează automat `toString()` → `Departament[nume=..., locatie=...]`,
-`equals()` (compară câmpurile), getteri `nume()` și `locatie()`.
+=== Toate prioritățile ===
+🟢 LOW (level=1, color=green)
+🟡 MEDIUM (level=2, color=yellow)
+🟠 HIGH (level=3, color=orange)
+🔴 CRITICAL (level=4, color=red)
 
-**Observație:** `findByDepartament` din service va folosi `departament.nume()` pentru a compara,
-deci `equals()` pe record este folosit indirect (sau poți compara cu `equalsIgnoreCase`).
+=== Switch pe prioritate ===
+⚠️ Atenție! Prioritate ridicată!
 
-#### `Angajat.java` — clasă obișnuită cu `Comparable`
-Câmpuri private: `String nume`, `Departament departament`, `double salariu`
+=== valueOf ===
+Priority.valueOf("HIGH") = HIGH
 
-- Constructor complet
-- Getteri
-- `toString()` → `"Angajat{nume='...', departament=Departament[nume=..., locatie=...], salariu=...}"`
-- `implements Comparable<Angajat>` — **sortare după `salariu` descrescător**
-  (cel mai bine plătit apare primul)
+=== Comparare enum ===
+HIGH == HIGH? true
+HIGH == LOW? false
 
-#### `AngajatService.java` — Singleton
-- Constructor privat, `getInstance()` cu Holder intern
-- Câmp: `private Angajat[] angajati` (inițializat `new Angajat[0]`)
-- `void addAngajat(Angajat a)` — resize + adaugă + printează confirmare
-- `void printAll()` — afișează toți angajații (ordinea din array, nesortat)
-- `void listBySalary()` — clonează, `Arrays.sort(copy)`, afișează (descrescător, natural)
-- `void findByDepartament(String numeDept)` — parcurge array-ul, afișează toți angajații
-  al căror `angajat.getDepartament().nume().equalsIgnoreCase(numeDept)`; dacă nu găsește
-  niciun angajat, afișează `"Niciun angajat în departamentul: <numeDept>"`
-
-#### `Main.java` — meniu interactiv cu `Scanner`
-
-```java
-while (true) {
-    System.out.println("\n===== Gestionare Angajați =====");
-    System.out.println("1. Adaugă angajat");
-    System.out.println("2. Listare după salariu");
-    System.out.println("3. Caută după departament");
-    System.out.println("0. Ieșire");
-    System.out.print("Opțiune: ");
-    // citește opțiunea și execută acțiunea
-}
+=== name() și ordinal() ===
+LOW: name=LOW, ordinal=0
+MEDIUM: name=MEDIUM, ordinal=1
+HIGH: name=HIGH, ordinal=2
+CRITICAL: name=CRITICAL, ordinal=3
 ```
 
-Opțiunea 1 citește: `nume` (String), `numeDepartament` (String), `locatieDepartament` (String),
-`salariu` (double) — construiește `Departament` și `Angajat`, apelează `addAngajat`.
+</details>
+
+---
+
+### Exercițiul 3 — Excepții custom
+
+<<<<<<< HEAD
+> 📖 **Exemplu:** Rulează mai întâi [exceptions/ExampleExceptions.java](src/com/pao/laboratory03/exceptions/ExampleExceptions.java) pentru a vedea try-catch, custom exceptions, multi-catch.
+
+=======
+>>>>>>> 41e0cae (lab4 and submission steps)
+Creează `InvalidAgeException.java` și `DuplicateEntryException.java` în [exceptions/](src/com/pao/laboratory03/exceptions), apoi completează [exceptions/Main.java](src/com/pao/laboratory03/exceptions/Main.java).
+
+<details>
+<summary><b>Ierarhia excepțiilor</b></summary>
+
+```
+                    Throwable
+                   /         \
+             Exception       Error (NU se prind)
+              /       \
+  checked exceptions   RuntimeException (unchecked)
+  (IOException)         /      |       \
+                  NullPointer  IndexOutOf  IllegalArgument
+                                            \
+                                     excepțiile tale custom
+```
+
+| Tip | Compilatorul forțează? | Exemple |
+|-----|----------------------|---------|
+| **Checked** | ✅ Da | `IOException`, `SQLException` |
+| **Unchecked** | ❌ Nu | `NullPointerException`, `IllegalArgumentException` |
+| **Error** | ❌ Nu se prind | `OutOfMemoryError`, `StackOverflowError` |
+
+</details>
+
+**Reține:**
+- `throw new MyException("mesaj")` — aruncă
+- `throws MyException` — declară în semnătură
+- `catch (Ex1 | Ex2 e)` — multi-catch
+- Ordinea: **specific → general**
+- `finally` — se execută **mereu**
+
+<details>
+<summary><b>Output așteptat</b></summary>
+
+```
+=== a) Unchecked — NullPointerException ===
+Prins: Cannot invoke "String.length()" because "s" is null
+Finally se execută mereu!
+
+=== b) Custom exceptions ===
+InvalidAgeException: Vârsta -5 nu este validă (0-150)
+DuplicateEntryException: 'Ana' există deja în listă
+
+=== c) Multi-catch ===
+Excepție prinsă: Vârsta 200 nu este validă (0-150)
+
+=== d) Catch ordering (specific → general) ===
+InvalidAgeException prinsă specific: Vârsta -1 nu este validă (0-150)
+
+=== e) Throw vs throws ===
+Metoda process() a aruncat: Vârsta 999 nu este validă (0-150)
+```
+
+</details>
+
+---
+
+### Exercițiul 4 (Integrator) — Gestiune studenți + note
+
+Creează **6 clase de la zero** apoi completează TODO-urile din [exercise/Main.java](src/com/pao/laboratory03/exercise/Main.java). Specs complete în Javadoc.
+
+| # | Clasă | Pachet | Tip |
+|---|-------|--------|-----|
+| 1 | `Subject.java` | [exercise/model/](src/com/pao/laboratory03/exercise/model) | Enum (PAOJ, BD, SO, RC) cu `fullName` + `credits` |
+| 2 | `Student.java` | [exercise/model/](src/com/pao/laboratory03/exercise/model) | Clasă cu `Map<Subject, Double> grades` |
+| 3 | `InvalidStudentException.java` | [exercise/exception/](src/com/pao/laboratory03/exercise/exception) | extends RuntimeException |
+| 4 | `InvalidGradeException.java` | [exercise/exception/](src/com/pao/laboratory03/exercise/exception) | extends RuntimeException |
+| 5 | `StudentNotFoundException.java` | [exercise/exception/](src/com/pao/laboratory03/exercise/exception) | extends RuntimeException |
+| 6 | `StudentService.java` | [exercise/service/](src/com/pao/laboratory03/exercise/service) | Singleton cu `List<Student>` + 6 metode |
 
 <details>
 <summary><b>Exemplu interacțiune</b></summary>
 
 ```
-===== Gestionare Angajați =====
-1. Adaugă angajat
-2. Listare după salariu
-3. Caută după departament
+=== Sistem Gestiune Studenți ===
+
+--- Meniu ---
+1. Adaugă student
+2. Adaugă notă
+3. Afișează toți studenții
+4. Top studenți (după medie)
+5. Media pe materie
 0. Ieșire
 Opțiune: 1
 Nume: Ana
-Departament (nume): IT
-Departament (locatie): Cluj
-Salariu: 7500
-Angajat adăugat: Ana
+Vârsta: 20
+Student adăugat cu succes!
 
-===== Gestionare Angajați =====
-Opțiune: 1
-Nume: Mihai
-Departament (nume): HR
-Departament (locatie): București
-Salariu: 5200
-Angajat adăugat: Mihai
-
-===== Gestionare Angajați =====
-Opțiune: 1
-Nume: Elena
-Departament (nume): IT
-Departament (locatie): Cluj
-Salariu: 8900
-Angajat adăugat: Elena
-
-===== Gestionare Angajați =====
 Opțiune: 2
---- Angajați după salariu (descrescător) ---
-1. Angajat{nume='Elena', departament=Departament[nume=IT, locatie=Cluj], salariu=8900.0}
-2. Angajat{nume='Ana', departament=Departament[nume=IT, locatie=Cluj], salariu=7500.0}
-3. Angajat{nume='Mihai', departament=Departament[nume=HR, locatie=București], salariu=5200.0}
+Nume student: Ana
+Materie (PAOJ, BD, SO, RC): PAOJ
+Nota (1-10): 9.5
+Notă adăugată!
 
-===== Gestionare Angajați =====
 Opțiune: 3
-Departament: IT
---- Angajați din IT ---
-Angajat{nume='Ana', departament=Departament[nume=IT, locatie=Cluj], salariu=7500.0}
-Angajat{nume='Elena', departament=Departament[nume=IT, locatie=Cluj], salariu=8900.0}
+1. Student{name='Ana', age=20, avg=8.75}
+   PAOJ = 9.5
+   BD = 8.0
 
-===== Gestionare Angajați =====
+Opțiune: 4
+=== Top studenți ===
+1. Ana — media: 8.75
+2. Mihai — media: 7.00
+
+Opțiune: 5
+=== Media pe materie ===
+PAOJ: 8.25
+BD: 8.00
+
+Opțiune: 1
+Nume: Invalid
+Vârsta: -5
+Eroare: Vârsta -5 nu este validă (18-60)
+
 Opțiune: 0
 La revedere!
 ```
 
 </details>
 
+<details>
+<summary><b>Hint-uri</b></summary>
+
+**Subject.java (enum):**
+```java
+public enum Subject {
+    PAOJ("Programare Avansată pe Obiecte", 6),
+    BD("Baze de Date", 5),
+    // ...
+    ;
+    // câmpuri, constructor, getteri
+}
+```
+
+**Student.java — getAverage():**
+```java
+public double getAverage() {
+    if (grades.isEmpty()) return 0;
+    double sum = 0;
+    for (double g : grades.values()) sum += g;
+    return sum / grades.size();
+}
+```
+
+**StudentService.java — Singleton:**
+```java
+private static StudentService instance;
+private StudentService() { ... }
+public static StudentService getInstance() { ... }
+```
+
+**StudentService.java — getAveragePerSubject():**
+```java
+Map<Subject, Double> result = new HashMap<>();
+for (Subject subject : Subject.values()) {
+    // colectează note de la toți studenții care au notă la 'subject'
+}
+```
+
+</details>
+
 ---
 
-## Exercise 4 (Bonus) — Audit Log
+### Exercițiul 5 (Bonus) — Task Manager cu Audit Log
 
-📄 **Pachet:** [audit/](audit/)
+Construiește un sistem complet **fără schelet de cod** — primești doar cerințele în [bonus/Main.java](src/com/pao/laboratory03/bonus/Main.java). Tu decizi structura claselor și organizarea pachetelor.
 
-> ⏱️ Pre-rechizit: termină Exercise 3 mai întâi.
+**Ce trebuie creat (~8 clase):**
 
-### Ce creezi (toate fișierele în `com.pao.laboratory05.audit`)
+| Tip | Clase | Ce e diferit față de Ex. 4 |
+|-----|-------|---------------------------|
+| Model | `Task` (id, title, status, priority, assignee) | ID generat automat ("T001", "T002"...) |
+| Enum | `Status` cu metodă abstractă `canTransitionTo(Status)` | **State machine**: TODO→IN_PROGRESS→DONE, nu poți merge înapoi |
+| Enum | `Priority` cu `calculateScore(int baseDays)` | Enum cu **logică de calcul**, nu doar date |
+| Excepții | `DuplicateTaskException`, `TaskNotFoundException`, `InvalidTransitionException` | `InvalidTransitionException` are **câmpuri extra** (fromStatus, toStatus) |
+| Serviciu | `TaskService` (Singleton) cu **2 Map-uri** + **audit log** | `Map<String, Task>` + `Map<Priority, List<Task>>` + `List<String>` |
 
-Copiază clasele `Departament.java`, `Angajat.java` din `angajati/` în pachetul `audit/`
-(ajustează declarația `package`). Vei extinde `AngajatService` cu audit.
-
-#### `AuditEntry.java` — record
-```java
-public record AuditEntry(String action, String target, String timestamp) { }
-```
-- `action` — ce s-a făcut (ex: `"ADD"`, `"FIND_BY_DEPT"`)
-- `target` — obiectul afectat (ex: numele angajatului sau numele departamentului)
-- `timestamp` — momentul acțiunii; folosește `java.time.LocalDateTime.now().toString()`
-
-#### `AngajatService.java` — Singleton cu audit
-Același ca la Ex3, plus:
-- Câmp suplimentar: `private AuditEntry[] auditLog` (inițializat `new AuditEntry[0]`)
-- Metodă privată `logAction(String action, String target)` — creează un `AuditEntry`
-  cu `LocalDateTime.now().toString()` și îl adaugă în `auditLog` (resize pattern)
-- `addAngajat` → apelează `logAction("ADD", angajat.getNume())` după adăugare
-- `findByDepartament` → apelează `logAction("FIND_BY_DEPT", numeDept)` la început
-- `void printAuditLog()` — parcurge și afișează toate intrările
-
-#### `Main.java` — meniu extins față de Ex3, cu opțiunea extra:
-```
-4. Afișează audit log
-```
+**Ce face acest exercițiu mai dificil:**
+- Enum cu **state machine** (tranziții valide/invalide)
+- Excepție custom cu **câmpuri suplimentare** (nu doar message)
+- Serviciu cu **structuri de date multiple** sincronizate
+- **Audit log** — pattern real din aplicații enterprise
+- **Scor de urgență** calculat din enum
+- **Organizare liberă** — tu decizi pachetele
 
 <details>
-<summary><b>Exemplu output audit</b></summary>
+<summary><b>Hint-uri</b></summary>
 
-```
-===== Gestionare Angajați (cu Audit) =====
-Opțiune: 4
---- Audit Log ---
-AuditEntry[action=ADD, target=Ana, timestamp=2026-03-23T10:15:32.123]
-AuditEntry[action=ADD, target=Mihai, timestamp=2026-03-23T10:15:45.456]
-AuditEntry[action=ADD, target=Elena, timestamp=2026-03-23T10:16:01.789]
-AuditEntry[action=FIND_BY_DEPT, target=IT, timestamp=2026-03-23T10:16:10.012]
+**Status enum cu canTransitionTo:**
+```java
+public enum Status {
+    TODO {
+        @Override public boolean canTransitionTo(Status next) {
+            return next == IN_PROGRESS || next == CANCELLED;
+        }
+    },
+    IN_PROGRESS {
+        @Override public boolean canTransitionTo(Status next) {
+            return next == DONE || next == CANCELLED;
+        }
+    },
+    DONE {
+        @Override public boolean canTransitionTo(Status next) { return false; }
+    },
+    CANCELLED {
+        @Override public boolean canTransitionTo(Status next) { return false; }
+    };
+
+    public abstract boolean canTransitionTo(Status next);
+}
 ```
 
-> 📌 `toString()` al `AuditEntry` este generat automat de `record` —
-> arată exact `AuditEntry[action=..., target=..., timestamp=...]`.
+**ID automat:**
+```java
+private int nextId = 1;
+String id = String.format("T%03d", nextId++);  // "T001", "T002"...
+```
+
+**Audit log:**
+```java
+private final List<String> auditLog = new ArrayList<>();
+// la fiecare operație:
+auditLog.add("[ADD] " + task.getId() + ": '" + task.getTitle() + "' (" + task.getPriority() + ")");
+```
+
+**getStatusSummary() — numără pe fiecare status:**
+```java
+Map<Status, Long> summary = new HashMap<>();
+for (Status s : Status.values()) {
+    long count = tasksById.values().stream()
+        .filter(t -> t.getStatus() == s).count();
+    // sau cu for clasic
+    summary.put(s, count);
+}
+```
 
 </details>
 
@@ -376,248 +371,226 @@ AuditEntry[action=FIND_BY_DEPT, target=IT, timestamp=2026-03-23T10:16:10.012]
 <details open>
 <summary><h2>Cheat Sheet</h2></summary>
 
-### `record` — sintaxă și ce primești gratuit
-
-```java
-public record Song(String title, String artist, int durationSeconds) { }
-```
-
-| Ce generează compilatorul | Echivalent manual |
-|--------------------------|-------------------|
-| `Song(String title, String artist, int durationSeconds)` | constructor complet |
-| `title()`, `artist()`, `durationSeconds()` | getteri (fără `get` prefix!) |
-| `toString()` | `"Song[title=..., artist=..., durationSeconds=...]"` |
-| `equals(Object o)` | compară câmp cu câmp |
-| `hashCode()` | consistent cu `equals` |
-
-**Record + interfață:**
-```java
-public record Song(String title, String artist, int durationSeconds)
-        implements Comparable<Song> {
-    @Override
-    public int compareTo(Song other) {
-        return this.title.compareTo(other.title);
-    }
-}
-```
-
-**Când folosești `record` vs clasă obișnuită:**
-
-| `record` | clasă obișnuită |
-|----------|----------------|
-| Date simple, imutabile | Nevoie de setteri / stare mutabilă |
-| Nu vrei să scrii boilerplate | Vrei să controlezi `toString`, `equals` |
-| Valori de transport (DTO, log entry) | Logică de business complexă |
-
----
-
-### `Comparable<T>` vs `Comparator<T>`
-
-| | `Comparable<T>` | `Comparator<T>` |
-|---|-----------------|-----------------|
-| **Unde** | în clasa modelului | clasă externă separată |
-| **Metoda** | `compareTo(T o)` | `compare(T o1, T o2)` |
-| **Câte** | una singură | oricâte |
-| **Utilizare** | `Arrays.sort(arr)` | `Arrays.sort(arr, comparator)` |
-| **Numire** | sortare **naturală** | sortare **alternativă** |
-
-**Regula de returnare:**
-
-| Returnează | Semnificație |
-|-----------|-------------|
-| negativ | `this` (sau `o1`) vine **înainte** |
-| `0` | egale |
-| pozitiv | `this` (sau `o1`) vine **după** |
-
-**Descrescător** — inversezi semnul:
-```java
-// Descrescător după salariu:
-@Override
-public int compareTo(Angajat other) {
-    return Double.compare(other.salariu, this.salariu); // other - this = descrescător
-}
-```
-
-**Comparare String:** `this.title.compareTo(other.title)` — alfabetic crescător.
-
----
-
-### `Arrays.sort` — variante
-
-```java
-Arrays.sort(arr);                          // natural (Comparable)
-Arrays.sort(arr, new MyComparator());      // Comparator extern
-Arrays.sort(arr, (a, b) -> ...);           // lambda (Comparator anonim)
-```
-
-**Clonare înainte de sort** (ca să păstrezi ordinea originală):
-```java
-Song[] copy = songs.clone();
-Arrays.sort(copy);
-```
-
----
-
-### Pattern Singleton + resize (recapitulare din Lab 01)
-
-```java
-public class BibliotecaService {
-    private Carte[] carti = new Carte[0];
-
-    private BibliotecaService() {}
-
-    private static class Holder {
-        private static final BibliotecaService INSTANCE = new BibliotecaService();
-    }
-
-    public static BibliotecaService getInstance() {
-        return Holder.INSTANCE;
-    }
-
-    public void addCarte(Carte carte) {
-        Carte[] tmp = new Carte[carti.length + 1];
-        System.arraycopy(carti, 0, tmp, 0, carti.length);
-        tmp[tmp.length - 1] = carte;
-        carti = tmp;
-    }
-}
-```
+| Concept | Sintaxă |
+|---------|---------|
+| `HashMap<K,V>` | O(1), ordine nepredictibilă |
+| `TreeMap<K,V>` | **Sortat** după cheie |
+| `map.getOrDefault(k, def)` | Returnează valoare sau default |
+| `map.entrySet()` | `for (Map.Entry<K,V> e : map.entrySet())` |
+| `enum` cu câmpuri | Constructor **privat**, getteri, metode abstracte |
+| `values()` / `valueOf("X")` | Toate constantele / String → enum |
+| `try-catch-finally` | `try { } catch (Ex e) { } finally { }` |
+| `throw` / `throws` | Aruncă excepție / Declară în semnătură |
+| Multi-catch | `catch (Ex1 \| Ex2 e)` |
+| Custom exception | `class MyEx extends RuntimeException { MyEx(String m) { super(m); } }` |
 
 </details>
 
 ---
 
-## Ce urmează la Laboratory 05?
+## Ce urmează la Laboratory 04?
 - Generics (`<T>`, bounded types, wildcards)
 - Stream API & lambdas (introducere)
-- Colecții generice (`List<T>`, `Set<T>`)
+- Design patterns (Factory, Strategy)
 
 ---
 
 ## FAQ
 
 <details>
-<summary><b>1. De ce getterul unui record se cheamă <code>title()</code> și nu <code>getTitle()</code>?</b></summary>
+<summary><b>1. <code>HashMap</code> vs <code>TreeMap</code> — când pe care?</b></summary>
 
-`record` urmează o convenție diferită față de clasele obișnuite — accesorul are **același nume cu câmpul**.
-Clasele obișnuite folosesc `getTitle()` prin convenție JavaBeans (pentru frameworks ca Spring/JPA).
-`record` nu urmează JavaBeans — e o structură de date simplă, nu un bean.
+| | `HashMap` | `TreeMap` |
+|---|----------|-----------|
+| **Ordine** | Nepredictibilă | Chei **sortate** |
+| **Performanță** | O(1) | O(log n) |
+| **Null keys** | ✅ 1 cheie null | ❌ Nu |
 
+**Frecvența elementelor:**
 ```java
-Song s = new Song("Imagine", "John Lennon", 187);
-s.title();           // ✅ record accessor
-s.getTitle();        // ❌ nu există!
+Map<String, Integer> freq = new HashMap<>();
+for (String word : words) {
+    freq.put(word, freq.getOrDefault(word, 0) + 1);
+}
 ```
+
+**Map cu liste:**
+```java
+Map<String, List<String>> groups = new HashMap<>();
+groups.computeIfAbsent("PAOJ", k -> new ArrayList<>()).add("Ana");
+```
+
+Cheile trebuie să aibă `equals()`/`hashCode()` corecte — vezi [Lab 02 FAQ #4](src/com/pao/laboratory02/Readme.md).
 
 </details>
 
 <details>
-<summary><b>2. Pot modifica câmpurile unui record după creare?</b></summary>
+<summary><b>2. Ce este un enum și când îl folosesc?</b></summary>
 
-**Nu.** Record-urile sunt **imutabile** — câmpurile sunt `final` implicit.
-Nu există setteri. Dacă ai nevoie de un obiect modificabil, folosește o clasă obișnuită.
+Enum = set **fix și finit** de constante singleton.
 
+**Folosește când:** set fix de valori (zile, stări, priorități), vrei type safety, vrei date/comportament pe constantă.
+
+**Enum cu câmpuri și metode abstracte:**
 ```java
-Song s = new Song("Imagine", "John Lennon", 187);
-// s.title = "altceva";   // ❌ eroare de compilare — câmp final
+public enum Priority {
+    LOW(1) {
+        @Override public String getEmoji() { return "🟢"; }
+    },
+    HIGH(3) {
+        @Override public String getEmoji() { return "🔴"; }
+    };
+
+    private final int level;
+    Priority(int level) { this.level = level; }
+    public int getLevel() { return level; }
+    public abstract String getEmoji();
+}
 ```
+
+**Reguli:** Constructor implicit privat · Comparare cu `==` · `values()` = toate constantele · `valueOf("HIGH")` = String → enum.
 
 </details>
 
 <details>
-<summary><b>3. Pot adăuga metode custom unui record?</b></summary>
+<summary><b>3. Checked vs unchecked exceptions?</b></summary>
 
-**Da.** Poți adăuga orice metodă, constructor compact, sau implementa interfețe:
+| | Checked | Unchecked |
+|---|---------|-----------|
+| **Superclasă** | `Exception` (dar NU `RuntimeException`) | `RuntimeException` |
+| **Compilatorul forțează** | ✅ Da | ❌ Nu |
+| **Cauza** | Condiții externe (fișier, rețea) | Bug-uri (null, index greșit) |
+| **Custom** | `extends Exception` | `extends RuntimeException` |
+
+**Practică:** Pentru excepții custom, de obicei `extends RuntimeException` — mai simplu, nu poluează semnăturile.
+
+</details>
+
+<details>
+<summary><b>4. Când creez o excepție custom?</b></summary>
+
+**Da:** excepțiile standard nu exprimă problema · vrei catch diferențiat · vrei câmpuri extra.
+
+**Nu:** `IllegalArgumentException` exprimă deja problema.
 
 ```java
-public record Song(String title, String artist, int durationSeconds)
-        implements Comparable<Song> {
-
-    // metodă custom
-    public String formattedDuration() {
-        return durationSeconds / 60 + ":" + String.format("%02d", durationSeconds % 60);
+public class StudentNotFoundException extends RuntimeException {
+    public StudentNotFoundException(String message) {
+        super(message);  // super(msg) → Throwable.getMessage()
     }
-
-    // interfață implementată
-    @Override
-    public int compareTo(Song other) {
-        return this.title.compareTo(other.title);
-    }
 }
 ```
 
-</details>
-
-<details>
-<summary><b>4. De ce clonez array-ul înainte de sort?</b></summary>
-
-`Arrays.sort` sortează **in-place** — modifică array-ul original.
-Dacă vrei să afișezi de mai multe ori în ordini diferite fără să pierzi ordinea de inserare, clonezi:
-
-```java
-Song[] copy = songs.clone();   // array nou, referințe la aceleași obiecte
-Arrays.sort(copy);             // sortează copia, originalul rămâne intact
-```
-
-`clone()` pe array face o **copie superficială** (shallow) — obiectele nu sunt duplicate,
-doar referințele. E suficient pentru sortare.
+Pattern-ul `super(message)` e același ca `super(name, age)` din [Lab 02 Dog.java](src/com/pao/laboratory02/exercise4/model/Dog.java).
 
 </details>
 
 <details>
-<summary><b>5. Cum compar <code>double</code> în <code>compareTo</code>?</b></summary>
+<summary><b>5. Ce face <code>finally</code>?</b></summary>
 
-Evită scăderea (`a - b`) pentru `double` — poate da rezultate greșite din cauza preciziei floating-point.
-Folosește `Double.compare`:
-
-```java
-// Descrescător după rating:
-@Override
-public int compareTo(Carte other) {
-    return Double.compare(other.getRating(), this.getRating());
-}
-
-// Crescător:
-return Double.compare(this.getRating(), other.getRating());
-```
-
-</details>
-
-<details>
-<summary><b>6. Cum funcționează Singleton Holder? De ce nu <code>static INSTANCE</code> direct?</b></summary>
+Se execută **mereu** — și dacă `try` reușește, și dacă `catch` prinde ceva, și chiar dacă ai `return`!
 
 ```java
-// ❌ Varianta simplă — instanța se creează la încărcarea clasei (eager)
-private static final BibliotecaService INSTANCE = new BibliotecaService();
-
-// ✅ Holder — instanța se creează doar la primul apel (lazy), thread-safe
-private static class Holder {
-    private static final BibliotecaService INSTANCE = new BibliotecaService();
+try {
+    return;
+} finally {
+    System.out.println("se execută oricum!");
 }
 ```
 
-Holder-ul este o clasă internă statică — JVM o încarcă **doar când e accesată prima dată**,
-adică la primul `getInstance()`. E garantat thread-safe de specificația JVM.
+**Alternativă modernă:** `try-with-resources` — `try (FileReader r = ...) { }`.
 
 </details>
 
 <details>
-<summary><b>7. Legătura cu proiectul individual</b></summary>
+<summary><b>6. De ce contează ordinea catch-urilor?</b></summary>
 
-| Ce faci în Lab 04 | Ce vei folosi în proiect |
-|-------------------|--------------------------|
-| `record` pentru date simple | DTO-uri, intrări de audit |
-| `Comparable` pe model | sortare naturală în serviciu |
-| `Comparator` extern | sortări alternative la cerere |
-| Singleton + array resize | servicii de gestiune obiecte |
-| Meniu interactiv | interfața utilizator (Main) |
-| Audit log cu `record` | **Etapa II** — serviciu de audit CSV |
+Java intră în **primul** catch care se potrivește. Specific → general, altfel eroare de compilare.
+
+```java
+// ✅ Corect
+catch (InvalidAgeException e) { ... }    // specific
+catch (RuntimeException e) { ... }       // general
+
+// ❌ Greșit — nu compilează
+catch (RuntimeException e) { ... }       // prinde TOT
+catch (InvalidAgeException e) { ... }    // unreachable!
+```
+
+Multi-catch: `catch (Ex1 | Ex2 e)` — doar dacă NU sunt în relație părinte-copil.
 
 </details>
 
+<details>
+<summary><b>7. <code>throw</code> vs <code>throws</code>?</b></summary>
 
+| | `throw` | `throws` |
+|---|---------|----------|
+| **Ce face** | Aruncă excepție | Declară că metoda poate arunca |
+| **Unde** | Corpul metodei | Semnătura metodei |
+| **Sintaxă** | `throw new MyEx("msg")` | `void m() throws MyEx` |
 
+`throws` obligatoriu doar pentru checked exceptions.
 
+</details>
 
+<details>
+<summary><b>8. Utilizări <code>super</code> în Lab 03</b></summary>
 
+`super` apare în excepții custom — transmite mesajul către `RuntimeException`:
+
+| Clasă | Apel | Părinte |
+|-------|------|---------|
+| `InvalidAgeException` | `super(message)` | `RuntimeException` |
+| `DuplicateEntryException` | `super(message)` | `RuntimeException` |
+| `InvalidStudentException` | `super(message)` | `RuntimeException` |
+| `InvalidGradeException` | `super(message)` | `RuntimeException` |
+| `StudentNotFoundException` | `super(message)` | `RuntimeException` |
+
+Același pattern ca `super(name, age)` din Lab 02. Lista completă → [Lab 02 FAQ #1](src/com/pao/laboratory02/Readme.md).
+
+</details>
+
+<details>
+<summary><b>9. Enum ca cheie în <code>HashMap</code>?</b></summary>
+
+**Da!** Enum-urile sunt ideale — `hashCode()`/`equals()` corecte, imutabile. Java oferă și `EnumMap` optimizat:
+
+```java
+Map<Subject, Double> grades = new EnumMap<>(Subject.class);
+grades.put(Subject.PAOJ, 9.5);
+```
+
+</details>
+
+<details>
+<summary><b>10. <code>List</code> vs <code>Set</code> vs <code>Map</code>?</b></summary>
+
+```
+Perechi cheie → valoare?  → Map (HashMap / TreeMap)
+Unicitate?                → Set (HashSet / TreeSet)
+Ordine + duplicate?       → ArrayList
+Sortare automată?         → TreeSet / TreeMap
+```
+
+**Proiect:** minim 2 colecții diferite, una sortată → `ArrayList` + `TreeMap`/`TreeSet`.
+
+</details>
+
+---
+
+<details>
+<summary><h2>Legătura cu proiectul individual</h2></summary>
+
+| Cerință proiect | Ce ai învățat |
+|----------------|---------------|
+| 2 colecții diferite, 1 sortată | `HashMap`/`TreeMap` + `ArrayList` |
+| 8 tipuri de obiecte | Enum-uri = tipuri noi |
+| 10 acțiuni/interogări | Serviciu CRUD + validare cu excepții |
+| Clasă serviciu | Singleton din Lab 01-03 |
+| Validare date | Excepții custom |
+
+**După Lab 03 poți începe Etapa I a proiectului!**
+
+</details>
 

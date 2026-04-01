@@ -8,10 +8,10 @@ Materiale și resurse pentru cursul **Programare Avansată pe Obiecte în Java**
 
 | Laborator                                          | Subiect                                                          |
 |----------------------------------------------------|------------------------------------------------------------------|
-| [laboratory01](src/com/pao/laboratory01/Readme.md) | Primul program, array-uri, Scanner                               |
-| [laboratory02](src/com/pao/laboratory02/Readme.md) | Clase, încapsulare, Singleton, Comparator                        |
-| [laboratory03](src/com/pao/laboratory03/Readme.md) | Moștenire, clase abstracte, interfețe, equals/hashCode, colecții |
-| [laboratory04](src/com/pao/laboratory04/Readme.md) | Map, enum-uri, excepții custom                                   |
+| [laboratory01](src/com/pao/laboratory02/Readme.md) | Primul program, array-uri, Scanner                               |
+| [laboratory02](src/com/pao/laboratory03/Readme.md) | Clase, încapsulare, Singleton, Comparator                        |
+| [laboratory03](src/com/pao/laboratory04/Readme.md) | Moștenire, clase abstracte, interfețe, equals/hashCode, colecții |
+| [laboratory04](src/com/pao/laboratory05/Readme.md) | Map, enum-uri, excepții custom                                   |
 | [laboratory05](src/com/pao/laboratory05/Readme.md) | Records, Comparable aprofundat, Comparator multiplu              |
 
 Începând cu **laboratory04**, soluțiile se trimit pe GitHub la un fork personal al acestui repo.
@@ -355,7 +355,7 @@ java NumeleFisierului         # fără extensia .class
 ```bash
 cd src
 javac com/pao/laboratory01/Main.java
-java com.pao.laboratory01.Main
+java com.pao.laboratory02.Main
 ```
 
 > Compilarea folosește `/` (sau `\` pe Windows), rularea folosește `.` (puncte).
