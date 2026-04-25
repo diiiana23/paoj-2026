@@ -1,4 +1,5 @@
 package com.pao.laboratory07.exercise1;
+
 import com.pao.laboratory07.exercise1.exceptions.*;
 import java.util.Stack;
 
@@ -16,7 +17,7 @@ public class Order {
         }
         history.push(currentState);
         currentState = currentState.next();
-        System.out.println(currentState);
+        System.out.println("Order state updated to: " + currentState);
     }
 
     public void cancel() throws CannotCancelFinalOrderException {
@@ -25,7 +26,7 @@ public class Order {
         }
         history.push(currentState);
         currentState = OrderState.CANCELED;
-        System.out.println(currentState);
+        System.out.println("Order has been canceled.");
     }
 
     public void undoState() throws CannotRevertInitialOrderStateException {
@@ -33,6 +34,6 @@ public class Order {
             throw new CannotRevertInitialOrderStateException();
         }
         currentState = history.pop();
-        System.out.println(currentState);
+        System.out.println("Order state reverted to: " + currentState);
     }
 }

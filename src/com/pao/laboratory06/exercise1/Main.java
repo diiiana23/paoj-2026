@@ -10,6 +10,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         String optiune = scanner.next();
         int numarAngajati = scanner.nextInt();
+
         Angajat[] angajati = new Angajat[numarAngajati];
         for (int i = 0; i < numarAngajati; i++) {
             angajati[i] = Angajat.citeste(scanner);

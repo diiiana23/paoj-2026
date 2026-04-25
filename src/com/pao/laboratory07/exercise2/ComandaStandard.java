@@ -11,7 +11,8 @@ public final class ComandaStandard extends Comanda {
     }
     @Override
     public String descriere() {
-        return String.format("STANDARD: %s, pret: %.2f lei [%s]",
+        return String.format(java.util.Locale.US,
+                "STANDARD: %s, pret: %.2f lei [%s]",
                 nume, pretFinal(), stare);
     }
 }

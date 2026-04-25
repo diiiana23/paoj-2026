@@ -11,7 +11,8 @@ public final class ComandaGratuita extends Comanda {
     }
     @Override
     public String descriere() {
-        return String.format("GIFT: %s, gratuit [%s]",
+        return String.format(java.util.Locale.US,
+                "GIFT: %s, gratuit [%s]",
                 nume, stare);
     }
 }
