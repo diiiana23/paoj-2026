@@ -1,18 +1,17 @@
 # Catalog Scolar
 ---
 
-## Descriere
+## Descriere - Etapa 1
 
-Aplicatia modeleaza un catalog scolar in care se pot gestiona studenti, profesori, materii si note.  
-Se pot adauga studenti si profesori, se pot atribui note si se poate calcula media fiecarui student.  
+Aplicatia modeleaza un catalog scolar in care se pot gestiona studenti, profesori, materii si note. In meniul interactiv se pot efectua mai multe actiuni, precum: adaugare de studenti si profesori, se pot atribui note, se poate calcula media fiecarui student, etc.
 Datele sunt gestionate in memorie folosind colectii Java, iar operatiile sunt realizate prin servicii de tip Singleton.
----
+
 
 ## 1. Interogari disponibile
 
 1. Afisare lista studenti
 2. Afisare lista profesori
-3. Afisare notele unui student
+3. Afisarea notelor unui student
 4. Adaugare student
 5. Adaugare profesor
 6. Adaugare nota pentru un student la o anumita materie
